@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; }
+.btn-inactive { opacity: 0.35 !important; }
+</style>
+</head>
+<body>
+<div id="buttons" style="margin-bottom:12px;">
+<button id="btn-0" onclick="toggleGrade(0)" style="background-color:#8C1515;color:white;border:none;border-radius:4px;padding:8px 16px;margin:4px;cursor:pointer;font-size:14px;" data-active="true">Elementary School</button>
+<button id="btn-1" onclick="toggleGrade(1)" style="background-color:#FAA54A;color:white;border:none;border-radius:4px;padding:8px 16px;margin:4px;cursor:pointer;font-size:14px;" data-active="true">Middle School</button>
+<button id="btn-2" onclick="toggleGrade(2)" style="background-color:#009AB4;color:white;border:none;border-radius:4px;padding:8px 16px;margin:4px;cursor:pointer;font-size:14px;" data-active="true">High School</button>
+<button id="btn-3" onclick="toggleGrade(3)" style="background-color:#2E5D54;color:white;border:none;border-radius:4px;padding:8px 16px;margin:4px;cursor:pointer;font-size:14px;" data-active="true">Multi-grade</button>
+</div>
+<div id="heatmap"></div>
+<script>
+var comboData = {"1": {"z": [[18393, 7402, 4713, 5665, 4735, 5772, 259, 304, 710, 1059]], "y": ["Elementary School"], "zmin": 0, "zmax": 18393, "text": [["18393", "7402", "4713", "5665", "4735", "5772", "259", "304", "710", "1059"]]}, "2": {"z": [[986, 6053, 4546, 2579, 3600, 2578, 792, 1012, 684, 568]], "y": ["Middle School"], "zmin": 0, "zmax": 6053, "text": [["986", "6053", "4546", "2579", "3600", "2578", "792", "1012", "684", "568"]]}, "3": {"z": [[18393, 7402, 4713, 5665, 4735, 5772, 259, 304, 710, 1059], [986, 6053, 4546, 2579, 3600, 2578, 792, 1012, 684, 568]], "y": ["Elementary School", "Middle School"], "zmin": 0, "zmax": 18393, "text": [["18393", "7402", "4713", "5665", "4735", "5772", "259", "304", "710", "1059"], ["986", "6053", "4546", "2579", "3600", "2578", "792", "1012", "684", "568"]]}, "4": {"z": [[1044, 8393, 6830, 4468, 4878, 2986, 4513, 2680, 1982, 1231]], "y": ["High School"], "zmin": 0, "zmax": 8393, "text": [["1044", "8393", "6830", "4468", "4878", "2986", "4513", "2680", "1982", "1231"]]}, "5": {"z": [[18393, 7402, 4713, 5665, 4735, 5772, 259, 304, 710, 1059], [1044, 8393, 6830, 4468, 4878, 2986, 4513, 2680, 1982, 1231]], "y": ["Elementary School", "High School"], "zmin": 0, "zmax": 18393, "text": [["18393", "7402", "4713", "5665", "4735", "5772", "259", "304", "710", "1059"], ["1044", "8393", "6830", "4468", "4878", "2986", "4513", "2680", "1982", "1231"]]}, "6": {"z": [[986, 6053, 4546, 2579, 3600, 2578, 792, 1012, 684, 568], [1044, 8393, 6830, 4468, 4878, 2986, 4513, 2680, 1982, 1231]], "y": ["Middle School", "High School"], "zmin": 0, "zmax": 8393, "text": [["986", "6053", "4546", "2579", "3600", "2578", "792", "1012", "684", "568"], ["1044", "8393", "6830", "4468", "4878", "2986", "4513", "2680", "1982", "1231"]]}, "7": {"z": [[18393, 7402, 4713, 5665, 4735, 5772, 259, 304, 710, 1059], [986, 6053, 4546, 2579, 3600, 2578, 792, 1012, 684, 568], [1044, 8393, 6830, 4468, 4878, 2986, 4513, 2680, 1982, 1231]], "y": ["Elementary School", "Middle School", "High School"], "zmin": 0, "zmax": 18393, "text": [["18393", "7402", "4713", "5665", "4735", "5772", "259", "304", "710", "1059"], ["986", "6053", "4546", "2579", "3600", "2578", "792", "1012", "684", "568"], ["1044", "8393", "6830", "4468", "4878", "2986", "4513", "2680", "1982", "1231"]]}, "8": {"z": [[4002, 6447, 4577, 5418, 4250, 4200, 1806, 1873, 1338, 1572]], "y": ["Multi-grade"], "zmin": 0, "zmax": 6447, "text": [["4002", "6447", "4577", "5418", "4250", "4200", "1806", "1873", "1338", "1572"]]}, "9": {"z": [[18393, 7402, 4713, 5665, 4735, 5772, 259, 304, 710, 1059], [4002, 6447, 4577, 5418, 4250, 4200, 1806, 1873, 1338, 1572]], "y": ["Elementary School", "Multi-grade"], "zmin": 0, "zmax": 18393, "text": [["18393", "7402", "4713", "5665", "4735", "5772", "259", "304", "710", "1059"], ["4002", "6447", "4577", "5418", "4250", "4200", "1806", "1873", "1338", "1572"]]}, "10": {"z": [[986, 6053, 4546, 2579, 3600, 2578, 792, 1012, 684, 568], [4002, 6447, 4577, 5418, 4250, 4200, 1806, 1873, 1338, 1572]], "y": ["Middle School", "Multi-grade"], "zmin": 0, "zmax": 6447, "text": [["986", "6053", "4546", "2579", "3600", "2578", "792", "1012", "684", "568"], ["4002", "6447", "4577", "5418", "4250", "4200", "1806", "1873", "1338", "1572"]]}, "11": {"z": [[18393, 7402, 4713, 5665, 4735, 5772, 259, 304, 710, 1059], [986, 6053, 4546, 2579, 3600, 2578, 792, 1012, 684, 568], [4002, 6447, 4577, 5418, 4250, 4200, 1806, 1873, 1338, 1572]], "y": ["Elementary School", "Middle School", "Multi-grade"], "zmin": 0, "zmax": 18393, "text": [["18393", "7402", "4713", "5665", "4735", "5772", "259", "304", "710", "1059"], ["986", "6053", "4546", "2579", "3600", "2578", "792", "1012", "684", "568"], ["4002", "6447", "4577", "5418", "4250", "4200", "1806", "1873", "1338", "1572"]]}, "12": {"z": [[1044, 8393, 6830, 4468, 4878, 2986, 4513, 2680, 1982, 1231], [4002, 6447, 4577, 5418, 4250, 4200, 1806, 1873, 1338, 1572]], "y": ["High School", "Multi-grade"], "zmin": 0, "zmax": 8393, "text": [["1044", "8393", "6830", "4468", "4878", "2986", "4513", "2680", "1982", "1231"], ["4002", "6447", "4577", "5418", "4250", "4200", "1806", "1873", "1338", "1572"]]}, "13": {"z": [[18393, 7402, 4713, 5665, 4735, 5772, 259, 304, 710, 1059], [1044, 8393, 6830, 4468, 4878, 2986, 4513, 2680, 1982, 1231], [4002, 6447, 4577, 5418, 4250, 4200, 1806, 1873, 1338, 1572]], "y": ["Elementary School", "High School", "Multi-grade"], "zmin": 0, "zmax": 18393, "text": [["18393", "7402", "4713", "5665", "4735", "5772", "259", "304", "710", "1059"], ["1044", "8393", "6830", "4468", "4878", "2986", "4513", "2680", "1982", "1231"], ["4002", "6447", "4577", "5418", "4250", "4200", "1806", "1873", "1338", "1572"]]}, "14": {"z": [[986, 6053, 4546, 2579, 3600, 2578, 792, 1012, 684, 568], [1044, 8393, 6830, 4468, 4878, 2986, 4513, 2680, 1982, 1231], [4002, 6447, 4577, 5418, 4250, 4200, 1806, 1873, 1338, 1572]], "y": ["Middle School", "High School", "Multi-grade"], "zmin": 0, "zmax": 8393, "text": [["986", "6053", "4546", "2579", "3600", "2578", "792", "1012", "684", "568"], ["1044", "8393", "6830", "4468", "4878", "2986", "4513", "2680", "1982", "1231"], ["4002", "6447", "4577", "5418", "4250", "4200", "1806", "1873", "1338", "1572"]]}, "15": {"z": [[18393, 7402, 4713, 5665, 4735, 5772, 259, 304, 710, 1059], [986, 6053, 4546, 2579, 3600, 2578, 792, 1012, 684, 568], [1044, 8393, 6830, 4468, 4878, 2986, 4513, 2680, 1982, 1231], [4002, 6447, 4577, 5418, 4250, 4200, 1806, 1873, 1338, 1572]], "y": ["Elementary School", "Middle School", "High School", "Multi-grade"], "zmin": 0, "zmax": 18393, "text": [["18393", "7402", "4713", "5665", "4735", "5772", "259", "304", "710", "1059"], ["986", "6053", "4546", "2579", "3600", "2578", "792", "1012", "684", "568"], ["1044", "8393", "6830", "4468", "4878", "2986", "4513", "2680", "1982", "1231"], ["4002", "6447", "4577", "5418", "4250", "4200", "1806", "1873", "1338", "1572"]]}};
+var subjects  = ["All Core Subjects", "English/Language Arts", "Social Studies", "Special Education", "Science/STEM", "Math", "Career and Technical Education", "Electives", "World Languages", "Art and/or Music"];
+var nGrades   = 4;
+var activeMask = 15;
+var layout = {
+  xaxis: {side: "bottom", tickangle: -45},
+  yaxis: {autorange: "reversed"},
+  plot_bgcolor: "white",
+  paper_bgcolor: "white",
+  margin: {t: 30, l: 180, b: 130, r: 80},
+  height: 520,
+  width:  950,
+  font: {size: 12}
+};
+
+function getTrace(d) {
+  return {
+    type: "heatmap",
+    z: d.z,
+    x: subjects,
+    y: d.y,
+    zmin: d.zmin,
+    zmax: d.zmax,
+    text: d.text,
+    texttemplate: "%{text}",
+    colorscale: "Viridis",
+    colorbar: {title: {text: "# Teachers"}}
+  };
+}
+
+Plotly.newPlot("heatmap", [getTrace(comboData[String(activeMask)])], layout);
+
+function toggleGrade(idx) {
+  var newMask = activeMask ^ (1 << idx);
+  if (newMask === 0) return;  // keep at least one grade active
+  activeMask = newMask;
+  for (var i = 0; i < nGrades; i++) {
+    var btn = document.getElementById("btn-" + i);
+    var isActive = (activeMask & (1 << i)) !== 0;
+    btn.dataset.active = isActive ? "true" : "false";
+    if (isActive) { btn.classList.remove("btn-inactive"); }
+    else          { btn.classList.add("btn-inactive");    }
+  }
+  Plotly.react("heatmap", [getTrace(comboData[String(activeMask)])], layout);
+}
+</script>
+</body>
+</html>
